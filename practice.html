@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tibetan Pronunciation Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .pulse-recording {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-rose-100 via-pink-50 to-orange-100">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <div class="flex justify-between items-center mb-6">
+            <a href="index.html" class="text-indigo-600 hover:text-indigo-800 font-semibold">← Back to Flashcards</a>
+            <div class="text-lg font-bold text-indigo-800">Progress: <span id="progress">0</span>/30</div>
+        </div>
+
+        <h1 class="text-4xl font-bold text-center text-indigo-800 mb-2">Pronunciation Practice</h1>
+        <p class="text-center text-gray-600 mb-8">Listen, record yourself, and compare</p>
+
+        <div id="practice-container" class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <div id="character" class="text-8xl font-bold text-indigo-700 mb-2">
+                    ཀ་
+                </div>
+                <div id="phonetic" class="text-2xl text-amber-600 font-semibold mb-4">
+                    ka
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Reference Audio -->
+                <div id="reference-section" class="bg-gray-50 rounded-xl p-4 hidden">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Reference Audio</h3>
+                    <button id="play-reference" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all w-full">
+                        🔊 Play Reference
+                    </button>
+                </div>
+
+                <!-- User Recording -->
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Your Recording</h3>
+                    <div class="flex gap-2 mb-3">
+                        <button id="record-btn" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all">
+                            🎤 Record
+                        </button>
+                        <button id="stop-btn" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all hidden">
+                            ⏹️ Stop
+                        </button>
+                    </div>
+                    <button id="play-recording" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all w-full hidden">
+                        🔊 Play Your Recording
+                    </button>
+                    <p id="recording-status" class="text-center text-gray-500 mt-2"></p>
+                </div>
+
+                <!-- Auto-Grade Result -->
+                <div id="auto-grade-section" class="bg-gray-50 rounded-xl p-4 hidden">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Comparison Result</h3>
+                    <div id="similarity-score" class="text-center mb-3"></div>
+                    <div id="grade-result" class="text-center text-xl font-bold mb-3"></div>
+                    <button id="next-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all w-full">
+                        Next Character →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="bg-white rounded-2xl shadow-xl p-8 hidden">
+            <h2 class="text-3xl font-bold text-center text-indigo-800 mb-4">Practice Complete!</h2>
+            <div class="text-center mb-6">
+                <p class="text-6xl font-bold text-indigo-600 mb-2"><span id="correct-count">0</span>/30</p>
+                <p class="text-gray-600">Correct pronunciations</p>
+            </div>
+            <div class="text-center">
+                <button id="restart-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all">
+                    Practice Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const alphabetData = [
+            { tibetan: 'ཀ་', phonetic: 'ka' },
+            { tibetan: 'ཁ་', phonetic: 'kha' },
+            { tibetan: 'ག་', phonetic: 'ga' },
+            { tibetan: 'ང་།', phonetic: 'nga' },
+            { tibetan: 'ཅ་', phonetic: 'ca' },
+            { tibetan: 'ཆ་', phonetic: 'cha' },
+            { tibetan: 'ཇ་', phonetic: 'ja' },
+            { tibetan: 'ཉ།', phonetic: 'nya' },
+            { tibetan: 'ཏ་', phonetic: 'ta' },
+            { tibetan: 'ཐ་', phonetic: 'tha' },
+            { tibetan: 'ད་', phonetic: 'da' },
+            { tibetan: 'ན།', phonetic: 'na' },
+            { tibetan: 'པ་', phonetic: 'pa' },
+            { tibetan: 'ཕ་', phonetic: 'pha' },
+            { tibetan: 'བ་', phonetic: 'ba' },
+            { tibetan: 'མ།', phonetic: 'ma' },
+            { tibetan: 'ཙ་', phonetic: 'tsa' },
+            { tibetan: 'ཚ་', phonetic: 'tsha' },
+            { tibetan: 'ཛ་', phonetic: 'dza' },
+            { tibetan: 'ཝ།', phonetic: 'wa' },
+            { tibetan: 'ཞ་', phonetic: 'zha' },
+            { tibetan: 'ཟ་', phonetic: 'za' },
+            { tibetan: 'འ་', phonetic: "'a" },
+            { tibetan: 'ཡ།', phonetic: 'ya' },
+            { tibetan: 'ར་', phonetic: 'ra' },
+            { tibetan: 'ལ་', phonetic: 'la' },
+            { tibetan: 'ཤ་', phonetic: 'sha' },
+            { tibetan: 'ས།', phonetic: 'sa' },
+            { tibetan: 'ཧ་', phonetic: 'ha' },
+            { tibetan: 'ཨ།', phonetic: 'a' }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let userRecordingBlob = null;
+        let userRecordingUrl = null;
+        let audioContext = null;
+        let referenceAudioBuffer = null;
+
+        const practiceContainer = document.getElementById('practice-container');
+        const resultsContainer = document.getElementById('results');
+        const characterDisplay = document.getElementById('character');
+        const phoneticDisplay = document.getElementById('phonetic');
+        const progressDisplay = document.getElementById('progress');
+        const referenceSection = document.getElementById('reference-section');
+        const playReferenceBtn = document.getElementById('play-reference');
+        const recordBtn = document.getElementById('record-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const playRecordingBtn = document.getElementById('play-recording');
+        const recordingStatus = document.getElementById('recording-status');
+        const autoGradeSection = document.getElementById('auto-grade-section');
+        const similarityScore = document.getElementById('similarity-score');
+        const gradeResult = document.getElementById('grade-result');
+        const nextBtn = document.getElementById('next-btn');
+        const correctCountDisplay = document.getElementById('correct-count');
+        const restartBtn = document.getElementById('restart-btn');
+
+        function loadCharacter() {
+            if (currentIndex >= alphabetData.length) {
+                showResults();
+                return;
+            }
+
+            const item = alphabetData[currentIndex];
+            characterDisplay.textContent = item.tibetan;
+            phoneticDisplay.textContent = item.phonetic;
+            progressDisplay.textContent = currentIndex + 1;
+            
+            // Reset recording UI
+            resetRecordingUI();
+        }
+
+        function playReferenceAudio() {
+            const item = alphabetData[currentIndex];
+            const audio = new Audio(`alphabets/${item.tibetan}.wav`);
+            audio.play().catch(error => {
+                console.error('Error playing audio:', error);
+            });
+        }
+
+        function resetRecordingUI() {
+            recordBtn.classList.remove('hidden');
+            stopBtn.classList.add('hidden');
+            playRecordingBtn.classList.add('hidden');
+            referenceSection.classList.add('hidden');
+            autoGradeSection.classList.add('hidden');
+            recordingStatus.textContent = '';
+            userRecordingBlob = null;
+            referenceAudioBuffer = null;
+            if (userRecordingUrl) {
+                URL.revokeObjectURL(userRecordingUrl);
+                userRecordingUrl = null;
+            }
+        }
+
+        async function loadReferenceAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            const item = alphabetData[currentIndex];
+            const response = await fetch(`alphabets/${item.tibetan}.wav`);
+            const arrayBuffer = await response.arrayBuffer();
+            referenceAudioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        }
+
+        async function compareAudioSimilarity(userBlob) {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const arrayBuffer = await userBlob.arrayBuffer();
+            const userAudioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+            // Extract frequency data from both audio buffers
+            const referenceData = extractFrequencyData(referenceAudioBuffer);
+            const userData = extractFrequencyData(userAudioBuffer);
+
+            // Calculate similarity using cosine similarity
+            return calculateCosineSimilarity(referenceData, userData);
+        }
+
+        function extractFrequencyData(audioBuffer) {
+            const channelData = audioBuffer.getChannelData(0);
+            const sampleRate = audioBuffer.sampleRate;
+            
+            // Create a simple frequency representation using FFT-like approach
+            const fftSize = 1024;
+            const frequencyData = new Float32Array(fftSize / 2);
+            
+            for (let i = 0; i < frequencyData.length; i++) {
+                let sum = 0;
+                const step = Math.floor(channelData.length / frequencyData.length);
+                for (let j = 0; j < step && (i * step + j) < channelData.length; j++) {
+                    sum += Math.abs(channelData[i * step + j]);
+                }
+                frequencyData[i] = sum / step;
+            }
+            
+            return frequencyData;
+        }
+
+        function calculateCosineSimilarity(arr1, arr2) {
+            let dotProduct = 0;
+            let norm1 = 0;
+            let norm2 = 0;
+            
+            const minLength = Math.min(arr1.length, arr2.length);
+            
+            for (let i = 0; i < minLength; i++) {
+                dotProduct += arr1[i] * arr2[i];
+                norm1 += arr1[i] * arr1[i];
+                norm2 += arr2[i] * arr2[i];
+            }
+            
+            norm1 = Math.sqrt(norm1);
+            norm2 = Math.sqrt(norm2);
+            
+            if (norm1 === 0 || norm2 === 0) return 0;
+            
+            return dotProduct / (norm1 * norm2);
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    userRecordingBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    userRecordingUrl = URL.createObjectURL(userRecordingBlob);
+                    playRecordingBtn.classList.remove('hidden');
+                    referenceSection.classList.remove('hidden');
+                    recordingStatus.textContent = 'Recording saved! Analyzing...';
+                    
+                    // Load reference audio and compare
+                    await loadReferenceAudio();
+                    const similarity = await compareAudioSimilarity(userRecordingBlob);
+                    
+                    // Display results
+                    const similarityPercent = Math.round(similarity * 100);
+                    similarityScore.textContent = `Similarity: ${similarityPercent}%`;
+                    
+                    if (similarityPercent >= 50) {
+                        correctCount++;
+                        gradeResult.textContent = '✓ Good pronunciation!';
+                        gradeResult.className = 'text-center text-xl font-bold mb-3 text-emerald-600';
+                    } else {
+                        gradeResult.textContent = '✗ Keep practicing!';
+                        gradeResult.className = 'text-center text-xl font-bold mb-3 text-red-600';
+                    }
+                    
+                    autoGradeSection.classList.remove('hidden');
+                };
+
+                mediaRecorder.start();
+                recordBtn.classList.add('hidden');
+                stopBtn.classList.remove('hidden');
+                stopBtn.classList.add('pulse-recording');
+                recordingStatus.textContent = 'Recording...';
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                recordingStatus.textContent = 'Error: Microphone access denied';
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+            stopBtn.classList.remove('pulse-recording');
+            stopBtn.classList.add('hidden');
+        }
+
+        function playUserRecording() {
+            if (userRecordingUrl) {
+                const audio = new Audio(userRecordingUrl);
+                audio.play().catch(error => {
+                    console.error('Error playing recording:', error);
+                });
+            }
+        }
+
+        function markCorrect() {
+            currentIndex++;
+            loadCharacter();
+        }
+
+        function showResults() {
+            practiceContainer.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+            correctCountDisplay.textContent = correctCount;
+        }
+
+        function restartPractice() {
+            currentIndex = 0;
+            correctCount = 0;
+            practiceContainer.classList.remove('hidden');
+            resultsContainer.classList.add('hidden');
+            loadCharacter();
+        }
+
+        playReferenceBtn.addEventListener('click', playReferenceAudio);
+        recordBtn.addEventListener('click', startRecording);
+        stopBtn.addEventListener('click', stopRecording);
+        playRecordingBtn.addEventListener('click', playUserRecording);
+        nextBtn.addEventListener('click', markCorrect);
+        restartBtn.addEventListener('click', restartPractice);
+
+        loadCharacter();
+    </script>
+</body>
+</html>
