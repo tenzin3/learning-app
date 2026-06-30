@@ -32,26 +32,52 @@
     </div>
 
     <script>
-        const alphabets = [
-            'ཀ་', 'ཁ་', 'ག་', 'ང་།', 'ཅ་', 'ཆ་', 
-            'ཇ་', 'ཉ།', 'ཏ་', 'ཐ་', 'ད་', 'ན།', 
-            'པ་', 'ཕ་', 'བ་', 'མ།', 'ཙ་', 'ཚ་', 
-            'ཛ་', 'ཝ།', 'ཞ་', 'ཟ་', 'འ་', 'ཡ།', 
-            'ར་', 'ལ་', 'ཤ་', 'ས།', 'ཧ་', 'ཨ།'
+        const alphabetData = [
+            { tibetan: 'ཀ་', phonetic: 'ka' },
+            { tibetan: 'ཁ་', phonetic: 'kha' },
+            { tibetan: 'ག་', phonetic: 'ga' },
+            { tibetan: 'ང་།', phonetic: 'nga' },
+            { tibetan: 'ཅ་', phonetic: 'ca' },
+            { tibetan: 'ཆ་', phonetic: 'cha' },
+            { tibetan: 'ཇ་', phonetic: 'ja' },
+            { tibetan: 'ཉ།', phonetic: 'nya' },
+            { tibetan: 'ཏ་', phonetic: 'ta' },
+            { tibetan: 'ཐ་', phonetic: 'tha' },
+            { tibetan: 'ད་', phonetic: 'da' },
+            { tibetan: 'ན།', phonetic: 'na' },
+            { tibetan: 'པ་', phonetic: 'pa' },
+            { tibetan: 'ཕ་', phonetic: 'pha' },
+            { tibetan: 'བ་', phonetic: 'ba' },
+            { tibetan: 'མ།', phonetic: 'ma' },
+            { tibetan: 'ཙ་', phonetic: 'tsa' },
+            { tibetan: 'ཚ་', phonetic: 'tsha' },
+            { tibetan: 'ཛ་', phonetic: 'dza' },
+            { tibetan: 'ཝ།', phonetic: 'wa' },
+            { tibetan: 'ཞ་', phonetic: 'zha' },
+            { tibetan: 'ཟ་', phonetic: 'za' },
+            { tibetan: 'འ་', phonetic: "'a" },
+            { tibetan: 'ཡ།', phonetic: 'ya' },
+            { tibetan: 'ར་', phonetic: 'ra' },
+            { tibetan: 'ལ་', phonetic: 'la' },
+            { tibetan: 'ཤ་', phonetic: 'sha' },
+            { tibetan: 'ས།', phonetic: 'sa' },
+            { tibetan: 'ཧ་', phonetic: 'ha' },
+            { tibetan: 'ཨ།', phonetic: 'a' }
         ];
 
         const flashcardsContainer = document.getElementById('flashcards');
 
-        alphabets.forEach((alphabet, index) => {
+        alphabetData.forEach((item, index) => {
             const card = document.createElement('div');
             card.className = 'flashcard bg-white rounded-2xl shadow-lg p-6 cursor-pointer flex flex-col items-center justify-center aspect-square';
             card.innerHTML = `
-                <span class="text-5xl md:text-6xl font-bold text-indigo-700">${alphabet}</span>
-                <span class="text-sm text-gray-500 mt-2">${index + 1}</span>
+                <span class="text-5xl md:text-6xl font-bold text-indigo-700">${item.tibetan}</span>
+                <span class="text-lg text-amber-600 font-semibold mt-2">${item.phonetic}</span>
+                <span class="text-sm text-gray-500 mt-1">${index + 1}</span>
             `;
             
             card.addEventListener('click', () => {
-                const audio = new Audio(`alphabets/${alphabet}.wav`);
+                const audio = new Audio(`alphabets/${item.tibetan}.wav`);
                 audio.play().catch(error => {
                     console.error('Error playing audio:', error);
                 });
