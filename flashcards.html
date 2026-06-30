@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tibetan Alphabet Flashcards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .flashcard {
+            transition: all 0.3s ease;
+        }
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+        .flashcard:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-indigo-800">Tibetan Alphabet Flashcards</h1>
+            <div class="flex gap-2">
+                <a href="quiz.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-all hover:scale-105">
+                    Take Quiz →
+                </a>
+                <a href="practice.html" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-all hover:scale-105">
+                    Pronunciation →
+                </a>
+            </div>
+        </div>
+        <p class="text-center text-gray-600 mb-8">Tap on any letter to hear its pronunciation</p>
+        
+        <div id="flashcards" class="grid grid-cols-4 gap-4">
+        </div>
+    </div>
+
+    <script>
+        const alphabetData = [
+            { tibetan: 'ཀ་', phonetic: 'ka' },
+            { tibetan: 'ཁ་', phonetic: 'kha' },
+            { tibetan: 'ག་', phonetic: 'ga' },
+            { tibetan: 'ང་།', phonetic: 'nga' },
+            { tibetan: 'ཅ་', phonetic: 'ca' },
+            { tibetan: 'ཆ་', phonetic: 'cha' },
+            { tibetan: 'ཇ་', phonetic: 'ja' },
+            { tibetan: 'ཉ།', phonetic: 'nya' },
+            { tibetan: 'ཏ་', phonetic: 'ta' },
+            { tibetan: 'ཐ་', phonetic: 'tha' },
+            { tibetan: 'ད་', phonetic: 'da' },
+            { tibetan: 'ན།', phonetic: 'na' },
+            { tibetan: 'པ་', phonetic: 'pa' },
+            { tibetan: 'ཕ་', phonetic: 'pha' },
+            { tibetan: 'བ་', phonetic: 'ba' },
+            { tibetan: 'མ།', phonetic: 'ma' },
+            { tibetan: 'ཙ་', phonetic: 'tsa' },
+            { tibetan: 'ཚ་', phonetic: 'tsha' },
+            { tibetan: 'ཛ་', phonetic: 'dza' },
+            { tibetan: 'ཝ།', phonetic: 'wa' },
+            { tibetan: 'ཞ་', phonetic: 'zha' },
+            { tibetan: 'ཟ་', phonetic: 'za' },
+            { tibetan: 'འ་', phonetic: "'a" },
+            { tibetan: 'ཡ།', phonetic: 'ya' },
+            { tibetan: 'ར་', phonetic: 'ra' },
+            { tibetan: 'ལ་', phonetic: 'la' },
+            { tibetan: 'ཤ་', phonetic: 'sha' },
+            { tibetan: 'ས།', phonetic: 'sa' },
+            { tibetan: 'ཧ་', phonetic: 'ha' },
+            { tibetan: 'ཨ།', phonetic: 'a' }
+        ];
+
+        const flashcardsContainer = document.getElementById('flashcards');
+
+        alphabetData.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'flashcard bg-white rounded-2xl shadow-lg p-6 cursor-pointer flex flex-col items-center justify-center aspect-square';
+            card.innerHTML = `
+                <span class="text-5xl md:text-6xl font-bold text-indigo-700">${item.tibetan}</span>
+                <span class="text-lg text-amber-600 font-semibold mt-2">${item.phonetic}</span>
+                <span class="text-sm text-gray-500 mt-1">${index + 1}</span>
+            `;
+            
+            card.addEventListener('click', () => {
+                const audio = new Audio(`alphabets/${item.tibetan}.wav`);
+                audio.play().catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+            });
+            
+            flashcardsContainer.appendChild(card);
+        });
+    </script>
+</body>
+</html>
