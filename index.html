@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tibetan Alphabet Flashcards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .flashcard {
+            transition: all 0.3s ease;
+        }
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+        .flashcard:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-indigo-800 mb-2">Tibetan Alphabet Flashcards</h1>
+        <p class="text-center text-gray-600 mb-8">Tap on any letter to hear its pronunciation</p>
+        
+        <div id="flashcards" class="grid grid-cols-4 gap-4">
+        </div>
+    </div>
+
+    <script>
+        const alphabets = [
+            'ཀ་', 'ཁ་', 'ག་', 'ང་།', 'ཅ་', 'ཆ་', 
+            'ཇ་', 'ཉ།', 'ཏ་', 'ཐ་', 'ད་', 'ན།', 
+            'པ་', 'ཕ་', 'བ་', 'མ།', 'ཙ་', 'ཚ་', 
+            'ཛ་', 'ཝ།', 'ཞ་', 'ཟ་', 'འ་', 'ཡ།', 
+            'ར་', 'ལ་', 'ཤ་', 'ས།', 'ཧ་', 'ཨ།'
+        ];
+
+        const flashcardsContainer = document.getElementById('flashcards');
+
+        alphabets.forEach((alphabet, index) => {
+            const card = document.createElement('div');
+            card.className = 'flashcard bg-white rounded-2xl shadow-lg p-6 cursor-pointer flex flex-col items-center justify-center aspect-square';
+            card.innerHTML = `
+                <span class="text-5xl md:text-6xl font-bold text-indigo-700">${alphabet}</span>
+                <span class="text-sm text-gray-500 mt-2">${index + 1}</span>
+            `;
+            
+            card.addEventListener('click', () => {
+                const audio = new Audio(`alphabets/${alphabet}.wav`);
+                audio.play().catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+            });
+            
+            flashcardsContainer.appendChild(card);
+        });
+    </script>
+</body>
+</html>
