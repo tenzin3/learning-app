@@ -27,11 +27,8 @@
 
         <div id="practice-container" class="bg-white rounded-2xl shadow-xl p-8">
             <div class="text-center mb-8">
-                <div id="character" class="text-8xl font-bold text-indigo-700 mb-2">
+                <div id="character" class="text-8xl font-bold text-indigo-700 mb-4">
                     ཀ་
-                </div>
-                <div id="phonetic" class="text-2xl text-amber-600 font-semibold mb-4">
-                    ka
                 </div>
             </div>
 
@@ -150,7 +147,6 @@
         const practiceContainer = document.getElementById('practice-container');
         const resultsContainer = document.getElementById('results');
         const characterDisplay = document.getElementById('character');
-        const phoneticDisplay = document.getElementById('phonetic');
         const progressDisplay = document.getElementById('progress');
         const referenceSection = document.getElementById('reference-section');
         const playReferenceBtn = document.getElementById('play-reference');
@@ -173,7 +169,6 @@
 
             const item = alphabetData[currentIndex];
             characterDisplay.textContent = item.tibetan;
-            phoneticDisplay.textContent = item.phonetic;
             progressDisplay.textContent = currentIndex + 1;
             
             // Reset recording UI
