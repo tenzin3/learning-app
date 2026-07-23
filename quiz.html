@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tibetan Alphabet Quiz</title>
+    <title>Tibetan Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .option-btn {
@@ -29,21 +29,31 @@
             <div class="text-lg font-bold text-indigo-800">Score: <span id="score">0</span>/<span id="total">0</span></div>
         </div>
 
-        <h1 class="text-4xl font-bold text-center text-indigo-800 mb-2">Tibetan Alphabet Quiz</h1>
-        <p class="text-center text-gray-600 mb-8">Listen to the audio and select the correct letter</p>
+        <div id="category-selector" class="bg-white rounded-2xl shadow-xl p-8 text-center">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">Choose a Quiz</h1>
+            <p class="text-gray-600 mb-8">Pick whether you want to practice alphabets or numbers.</p>
+            <div class="grid gap-4 md:grid-cols-2">
+                <button id="alphabet-quiz-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 px-6 rounded-xl shadow-lg transition-all hover:scale-105">
+                    Tibetan Alphabets
+                </button>
+                <button id="number-quiz-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-6 px-6 rounded-xl shadow-lg transition-all hover:scale-105">
+                    Tibetan Numbers
+                </button>
+            </div>
+        </div>
 
-        <div id="quiz-container" class="bg-white rounded-2xl shadow-xl p-8">
+        <div id="quiz-container" class="bg-white rounded-2xl shadow-xl p-8 hidden">
+            <h2 id="quiz-title" class="text-3xl font-bold text-center text-indigo-800 mb-2"></h2>
+            <p id="quiz-subtitle" class="text-center text-gray-600 mb-8"></p>
             <div class="text-center mb-8">
                 <button id="play-audio" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg transition-all hover:scale-105">
                     🔊 Play Audio
                 </button>
             </div>
 
-            <div id="options" class="grid grid-cols-2 gap-4">
-            </div>
+            <div id="options" class="grid grid-cols-2 gap-4"></div>
 
-            <div id="feedback" class="mt-6 text-center text-xl font-bold hidden">
-            </div>
+            <div id="feedback" class="mt-6 text-center text-xl font-bold hidden"></div>
 
             <div id="next-btn-container" class="mt-6 text-center hidden">
                 <button id="next-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all">
@@ -58,30 +68,54 @@
                 <p class="text-6xl font-bold text-indigo-600 mb-2"><span id="final-score">0</span>/<span id="final-total">10</span></p>
                 <p class="text-gray-600" id="percentage">0%</p>
             </div>
-            <div class="text-center">
+            <div class="text-center flex gap-3 justify-center">
                 <button id="restart-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all">
                     Try Again
+                </button>
+                <button id="back-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all">
+                    Choose Again
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        const alphabets = [
-            'ཀ་', 'ཁ་', 'ག་', 'ང་།', 'ཅ་', 'ཆ་', 
-            'ཇ་', 'ཉ།', 'ཏ་', 'ཐ་', 'ད་', 'ན།', 
-            'པ་', 'ཕ་', 'བ་', 'མ།', 'ཙ་', 'ཚ་', 
-            'ཛ་', 'ཝ།', 'ཞ་', 'ཟ་', 'འ་', 'ཡ།', 
-            'ར་', 'ལ་', 'ཤ་', 'ས།', 'ཧ་', 'ཨ།'
+        const alphabetData = [
+            'ཀ་', 'ཁ་', 'ག་', 'ང་།', 'ཅ་', 'ཆ་', 'ཇ་', 'ཉ།', 'ཏ་', 'ཐ་', 'ད་', 'ན།', 'པ་', 'ཕ་', 'བ་', 'མ།', 'ཙ་', 'ཚ་', 'ཛ་', 'ཝ།', 'ཞ་', 'ཟ་', 'འ་', 'ཡ།', 'ར་', 'ལ་', 'ཤ་', 'ས།', 'ཧ་', 'ཨ།'
         ];
 
+        const numberData = [
+            { numeral: '༡', audio: '༡-གཅིག-1.wav' },
+            { numeral: '༢', audio: '༢-གཉིས།-2.wav' },
+            { numeral: '༣', audio: '༣-གསུམ།-3.wav' },
+            { numeral: '༤', audio: '༤-བཞི།-4.wav' },
+            { numeral: '༥', audio: '༥-ལྔ་།-5.wav' },
+            { numeral: '༦', audio: '༦-དྲུག-6.wav' },
+            { numeral: '༧', audio: '༧-བདུན།-7.wav' },
+            { numeral: '༨', audio: '༨-བརྒྱད།-8.wav' },
+            { numeral: '༩', audio: '༩-དགུ་-9.wav' },
+            { numeral: '༡༠', audio: '༡༠-བཅུ།-10.wav' },
+            { numeral: '༡༡', audio: '༡༡-བཅུ་གཅིག་-11.wav' },
+            { numeral: '༡༢', audio: '༡༢-བཅུ་གཉིས།-12.wav' },
+            { numeral: '༡༣', audio: '༡༣-བཅུ་གསུམ།-13.wav' },
+            { numeral: '༡༤', audio: '༡༤-བཅུ་བཞི།-14.wav' },
+            { numeral: '༡༥', audio: '༡༥-བཅོ་ལྔ་།-15.wav' },
+            { numeral: '༡༦', audio: '༡༦-བཅུ་དྲུག-16.wav' },
+            { numeral: '༡༧', audio: '༡༧-བཅུ་བདུན།-17.wav' },
+            { numeral: '༡༨', audio: '༡༨-བཅོ་བརྒྱད།-18.wav' },
+            { numeral: '༡༩', audio: '༡༩-བཅུ་དགུ་-19.wav' },
+            { numeral: '༢༠', audio: '༢༠-ཉི་ཤུ།-20.wav' }
+        ];
+
+        let currentMode = '';
         let currentQuestion = 0;
         let score = 0;
         let totalQuestions = 10;
         let correctAnswer = '';
         let answered = false;
-        let shuffledAlphabets = [];
+        let shuffledItems = [];
 
+        const categorySelector = document.getElementById('category-selector');
         const quizContainer = document.getElementById('quiz-container');
         const resultsContainer = document.getElementById('results');
         const optionsContainer = document.getElementById('options');
@@ -95,6 +129,11 @@
         const finalTotal = document.getElementById('final-total');
         const percentage = document.getElementById('percentage');
         const restartBtn = document.getElementById('restart-btn');
+        const backBtn = document.getElementById('back-btn');
+        const alphabetBtn = document.getElementById('alphabet-quiz-btn');
+        const numberBtn = document.getElementById('number-quiz-btn');
+        const quizTitle = document.getElementById('quiz-title');
+        const quizSubtitle = document.getElementById('quiz-subtitle');
 
         function shuffleArray(array) {
             const shuffled = [...array];
@@ -105,15 +144,27 @@
             return shuffled;
         }
 
-        function generateOptions(correctAnswer) {
-            const options = [correctAnswer];
-            const remaining = alphabets.filter(a => a !== correctAnswer);
+        function getItems() {
+            return currentMode === 'numbers' ? numberData.map(item => item.numeral) : alphabetData;
+        }
+
+        function getAudioSource(item) {
+            if (currentMode === 'numbers') {
+                const selectedItem = numberData.find(number => number.numeral === item);
+                return selectedItem ? `numbers/${selectedItem.audio}` : '';
+            }
+            return `alphabets/${item}.wav`;
+        }
+
+        function generateOptions(correctValue) {
+            const options = [correctValue];
+            const remaining = getItems().filter(item => item !== correctValue);
             const shuffledRemaining = shuffleArray(remaining);
-            
+
             while (options.length < 4 && shuffledRemaining.length > 0) {
                 options.push(shuffledRemaining.pop());
             }
-            
+
             return shuffleArray(options);
         }
 
@@ -126,27 +177,27 @@
             answered = false;
             feedback.classList.add('hidden');
             nextBtnContainer.classList.add('hidden');
-            
-            correctAnswer = shuffledAlphabets[currentQuestion];
+
+            correctAnswer = shuffledItems[currentQuestion];
             const options = generateOptions(correctAnswer);
-            
+
             optionsContainer.innerHTML = '';
             options.forEach(option => {
                 const btn = document.createElement('button');
-                btn.className = 'option-btn bg-gray-100 hover:bg-gray-200 text-4xl font-bold text-indigo-700 py-6 rounded-xl shadow-md';
+                btn.className = 'option-btn bg-gray-100 hover:bg-gray-200 text-2xl md:text-4xl font-bold text-indigo-700 py-6 rounded-xl shadow-md';
                 btn.textContent = option;
                 btn.addEventListener('click', () => checkAnswer(option, btn));
                 optionsContainer.appendChild(btn);
             });
 
             totalDisplay.textContent = currentQuestion + 1;
-            
-            // Auto-play audio
             setTimeout(() => playAudio(), 300);
         }
 
         function playAudio() {
-            const audio = new Audio(`alphabets/${correctAnswer}.wav`);
+            const source = getAudioSource(correctAnswer);
+            if (!source) return;
+            const audio = new Audio(source);
             audio.play().catch(error => {
                 console.error('Error playing audio:', error);
             });
@@ -188,24 +239,40 @@
             percentage.textContent = `${percent}% - ${percent >= 80 ? 'Excellent!' : percent >= 60 ? 'Good job!' : 'Keep practicing!'}`;
         }
 
-        function startQuiz() {
+        function startQuiz(mode) {
+            currentMode = mode;
             currentQuestion = 0;
             score = 0;
             scoreDisplay.textContent = 0;
-            shuffledAlphabets = shuffleArray(alphabets).slice(0, totalQuestions);
+            categorySelector.classList.add('hidden');
             quizContainer.classList.remove('hidden');
             resultsContainer.classList.add('hidden');
+            quizTitle.textContent = mode === 'numbers' ? 'Tibetan Number Quiz' : 'Tibetan Alphabet Quiz';
+            quizSubtitle.textContent = mode === 'numbers' ? 'Listen to the audio and select the correct number.' : 'Listen to the audio and select the correct letter.';
+            shuffledItems = shuffleArray(getItems()).slice(0, totalQuestions);
             loadQuestion();
         }
 
+        alphabetBtn.addEventListener('click', () => startQuiz('alphabets'));
+        numberBtn.addEventListener('click', () => startQuiz('numbers'));
         playAudioBtn.addEventListener('click', playAudio);
         nextBtn.addEventListener('click', () => {
             currentQuestion++;
             loadQuestion();
         });
-        restartBtn.addEventListener('click', startQuiz);
+        restartBtn.addEventListener('click', () => startQuiz(currentMode));
+        backBtn.addEventListener('click', () => {
+            quizContainer.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            categorySelector.classList.remove('hidden');
+        });
 
-        startQuiz();
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('mode') === 'numbers') {
+            startQuiz('numbers');
+        } else if (params.get('mode') === 'alphabets') {
+            startQuiz('alphabets');
+        }
     </script>
 </body>
 </html>
