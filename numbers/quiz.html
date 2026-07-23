@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tibetan Number Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover {
+            transform: translateY(-2px);
+        }
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+        }
+        .incorrect {
+            background-color: #ef4444 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-100 via-teal-50 to-cyan-100">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <div class="flex justify-between items-center mb-6">
+            <a href="flashcards.html" class="text-amber-700 hover:text-amber-900 font-semibold">← Back to Flashcards</a>
+            <div class="text-lg font-bold text-amber-800">Score: <span id="score">0</span>/<span id="total">0</span></div>
+        </div>
+
+        <h1 class="text-4xl font-bold text-center text-amber-800 mb-2">Tibetan Number Quiz</h1>
+        <p class="text-center text-gray-600 mb-8">Listen to the audio and select the correct number</p>
+
+        <div id="quiz-container" class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <button id="play-audio" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg transition-all hover:scale-105">
+                    🔊 Play Audio
+                </button>
+            </div>
+
+            <div id="options" class="grid grid-cols-2 gap-4"></div>
+
+            <div id="feedback" class="mt-6 text-center text-xl font-bold hidden"></div>
+
+            <div id="next-btn-container" class="mt-6 text-center hidden">
+                <button id="next-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all">
+                    Next Question →
+                </button>
+            </div>
+        </div>
+
+        <div id="results" class="bg-white rounded-2xl shadow-xl p-8 hidden">
+            <h2 class="text-3xl font-bold text-center text-amber-800 mb-4">Quiz Complete!</h2>
+            <div class="text-center mb-6">
+                <p class="text-6xl font-bold text-amber-600 mb-2"><span id="final-score">0</span>/<span id="final-total">10</span></p>
+                <p class="text-gray-600" id="percentage">0%</p>
+            </div>
+            <div class="text-center">
+                <button id="restart-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all">
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const numberData = [
+            { numeral: '༡', audio: '༡-གཅིག-1.wav' },
+            { numeral: '༢', audio: '༢-གཉིས།-2.wav' },
+            { numeral: '༣', audio: '༣-གསུམ།-3.wav' },
+            { numeral: '༤', audio: '༤-བཞི།-4.wav' },
+            { numeral: '༥', audio: '༥-ལྔ་།-5.wav' },
+            { numeral: '༦', audio: '༦-དྲུག-6.wav' },
+            { numeral: '༧', audio: '༧-བདུན།-7.wav' },
+            { numeral: '༨', audio: '༨-བརྒྱད།-8.wav' },
+            { numeral: '༩', audio: '༩-དགུ་-9.wav' },
+            { numeral: '༡༠', audio: '༡༠-བཅུ།-10.wav' },
+            { numeral: '༡༡', audio: '༡༡-བཅུ་གཅིག་-11.wav' },
+            { numeral: '༡༢', audio: '༡༢-བཅུ་གཉིས།-12.wav' },
+            { numeral: '༡༣', audio: '༡༣-བཅུ་གསུམ།-13.wav' },
+            { numeral: '༡༤', audio: '༡༤-བཅུ་བཞི།-14.wav' },
+            { numeral: '༡༥', audio: '༡༥-བཅོ་ལྔ་།-15.wav' },
+            { numeral: '༡༦', audio: '༡༦-བཅུ་དྲུག-16.wav' },
+            { numeral: '༡༧', audio: '༡༧-བཅུ་བདུན།-17.wav' },
+            { numeral: '༡༨', audio: '༡༨-བཅོ་བརྒྱད།-18.wav' },
+            { numeral: '༡༩', audio: '༡༩-བཅུ་དགུ་-19.wav' },
+            { numeral: '༢༠', audio: '༢༠-ཉི་ཤུ།-20.wav' }
+        ];
+        const numbers = numberData.map(item => item.numeral);
+
+        let currentQuestion = 0;
+        let score = 0;
+        let totalQuestions = 10;
+        let correctAnswer = '';
+        let answered = false;
+        let shuffledNumbers = [];
+
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results');
+        const optionsContainer = document.getElementById('options');
+        const playAudioBtn = document.getElementById('play-audio');
+        const feedback = document.getElementById('feedback');
+        const nextBtnContainer = document.getElementById('next-btn-container');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreDisplay = document.getElementById('score');
+        const totalDisplay = document.getElementById('total');
+        const finalScore = document.getElementById('final-score');
+        const finalTotal = document.getElementById('final-total');
+        const percentage = document.getElementById('percentage');
+        const restartBtn = document.getElementById('restart-btn');
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function generateOptions(correctAnswer) {
+            const options = [correctAnswer];
+            const remaining = numbers.filter(a => a !== correctAnswer);
+            const shuffledRemaining = shuffleArray(remaining);
+
+            while (options.length < 4 && shuffledRemaining.length > 0) {
+                options.push(shuffledRemaining.pop());
+            }
+
+            return shuffleArray(options);
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= totalQuestions) {
+                showResults();
+                return;
+            }
+
+            answered = false;
+            feedback.classList.add('hidden');
+            nextBtnContainer.classList.add('hidden');
+
+            correctAnswer = shuffledNumbers[currentQuestion];
+            const options = generateOptions(correctAnswer);
+
+            optionsContainer.innerHTML = '';
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn bg-gray-100 hover:bg-gray-200 text-4xl font-bold text-amber-700 py-6 rounded-xl shadow-md';
+                btn.textContent = option;
+                btn.addEventListener('click', () => checkAnswer(option, btn));
+                optionsContainer.appendChild(btn);
+            });
+
+            totalDisplay.textContent = currentQuestion + 1;
+
+            setTimeout(() => playAudio(), 300);
+        }
+
+        function playAudio() {
+            const selectedItem = numberData.find(item => item.numeral === correctAnswer);
+            if (!selectedItem) return;
+
+            const audio = new Audio(selectedItem.audio);
+            audio.play().catch(error => {
+                console.error('Error playing audio:', error);
+            });
+        }
+
+        function checkAnswer(selected, btn) {
+            if (answered) return;
+            answered = true;
+
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            buttons.forEach(b => {
+                b.disabled = true;
+                if (b.textContent === correctAnswer) {
+                    b.classList.add('correct');
+                }
+            });
+
+            if (selected === correctAnswer) {
+                score++;
+                scoreDisplay.textContent = score;
+                feedback.textContent = '✓ Correct!';
+                feedback.className = 'mt-6 text-center text-xl font-bold text-emerald-600';
+            } else {
+                btn.classList.add('incorrect');
+                feedback.textContent = '✗ Incorrect';
+                feedback.className = 'mt-6 text-center text-xl font-bold text-red-600';
+            }
+
+            feedback.classList.remove('hidden');
+            nextBtnContainer.classList.remove('hidden');
+        }
+
+        function showResults() {
+            quizContainer.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+            finalScore.textContent = score;
+            finalTotal.textContent = totalQuestions;
+            const percent = Math.round((score / totalQuestions) * 100);
+            percentage.textContent = `${percent}% - ${percent >= 80 ? 'Excellent!' : percent >= 60 ? 'Good job!' : 'Keep practicing!'}`;
+        }
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            scoreDisplay.textContent = 0;
+            shuffledNumbers = shuffleArray(numbers).slice(0, totalQuestions);
+            quizContainer.classList.remove('hidden');
+            resultsContainer.classList.add('hidden');
+            loadQuestion();
+        }
+
+        playAudioBtn.addEventListener('click', playAudio);
+        nextBtn.addEventListener('click', () => {
+            currentQuestion++;
+            loadQuestion();
+        });
+        restartBtn.addEventListener('click', startQuiz);
+
+        startQuiz();
+    </script>
+</body>
+</html>
