@@ -74,6 +74,19 @@
             '༡', '༢', '༣', '༤', '༥', '༦', '༧', '༨', '༩', '༡༠'
         ];
 
+        const numberAudioMap = {
+            '༡': '༡-གཅིག-1.wav',
+            '༢': '༢-གཉིས།-2.wav',
+            '༣': '༣-གསུམ།-3.wav',
+            '༤': '༤-བཞི།-4.wav',
+            '༥': '༥-ལྔ་།-5.wav',
+            '༦': '༦-དྲུག-6.wav',
+            '༧': '༧-བདུན།-7.wav',
+            '༨': '༨-བརྒྱད།-8.wav',
+            '༩': '༩-དགུ་-9.wav',
+            '༡༠': '༡༠-བཅུ།-10.wav'
+        };
+
         let currentQuestion = 0;
         let score = 0;
         let totalQuestions = 10;
@@ -142,7 +155,16 @@
         }
 
         function playAudio() {
-            const audioPath = quizMode === 'number' ? `numbers/${correctAnswer}.wav` : `alphabets/${correctAnswer}.wav`;
+            let audioPath = '';
+
+            if (quizMode === 'number') {
+                audioPath = `numbers/${numberAudioMap[correctAnswer] || ''}`;
+            } else {
+                audioPath = `alphabets/${correctAnswer}.wav`;
+            }
+
+            if (!audioPath) return;
+
             const audio = new Audio(audioPath);
             audio.play().catch(error => {
                 console.error('Error playing audio:', error);
