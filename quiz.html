@@ -26,17 +26,14 @@
     <div class="container mx-auto px-4 py-8 max-w-2xl">
         <div class="flex justify-between items-center mb-6">
             <a href="flashcards.html" class="text-indigo-600 hover:text-indigo-800 font-semibold">← Back to Flashcards</a>
-            <a href="numbers/quiz.html" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-all hover:scale-105">
-                Numbers Quiz →
-            </a>
         </div>
 
         <div class="text-center mb-6">
-            <h1 class="text-4xl font-bold text-indigo-800 mb-2">Tibetan Alphabet Quiz</h1>
-            <p class="text-gray-600">Listen to the audio and select the correct letter.</p>
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">Tibetan Quiz</h1>
+            <p class="text-gray-600">Listen to the audio and select the correct answer.</p>
         </div>
 
-        <div id="quiz-container" class="bg-white rounded-2xl shadow-xl p-8">
+        <div id="quiz-container" class="bg-white rounded-2xl shadow-xl p-8 hidden">
             <div class="text-center mb-8">
                 <button id="play-audio" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg transition-all hover:scale-105">
                     🔊 Play Audio
@@ -73,12 +70,17 @@
             'ཀ་', 'ཁ་', 'ག་', 'ང་།', 'ཅ་', 'ཆ་', 'ཇ་', 'ཉ།', 'ཏ་', 'ཐ་', 'ད་', 'ན།', 'པ་', 'ཕ་', 'བ་', 'མ།', 'ཙ་', 'ཚ་', 'ཛ་', 'ཝ།', 'ཞ་', 'ཟ་', 'འ་', 'ཡ།', 'ར་', 'ལ་', 'ཤ་', 'ས།', 'ཧ་', 'ཨ།'
         ];
 
+        const numbers = [
+            '༡', '༢', '༣', '༤', '༥', '༦', '༧', '༨', '༩', '༡༠'
+        ];
+
         let currentQuestion = 0;
         let score = 0;
         let totalQuestions = 10;
         let correctAnswer = '';
         let answered = false;
-        let shuffledAlphabets = [];
+        let shuffledItems = [];
+        let quizMode = 'alphabet';
 
         const quizContainer = document.getElementById('quiz-container');
         const resultsContainer = document.getElementById('results');
@@ -87,8 +89,6 @@
         const feedback = document.getElementById('feedback');
         const nextBtnContainer = document.getElementById('next-btn-container');
         const nextBtn = document.getElementById('next-btn');
-        const scoreDisplay = document.getElementById('score');
-        const totalDisplay = document.getElementById('total');
         const finalScore = document.getElementById('final-score');
         const finalTotal = document.getElementById('final-total');
         const percentage = document.getElementById('percentage');
@@ -104,8 +104,9 @@
         }
 
         function generateOptions(correctValue) {
+            const pool = quizMode === 'number' ? numbers : alphabets;
             const options = [correctValue];
-            const remaining = alphabets.filter(item => item !== correctValue);
+            const remaining = pool.filter(item => item !== correctValue);
             const shuffledRemaining = shuffleArray(remaining);
 
             while (options.length < 4 && shuffledRemaining.length > 0) {
@@ -125,7 +126,7 @@
             feedback.classList.add('hidden');
             nextBtnContainer.classList.add('hidden');
 
-            correctAnswer = shuffledAlphabets[currentQuestion];
+            correctAnswer = shuffledItems[currentQuestion];
             const options = generateOptions(correctAnswer);
 
             optionsContainer.innerHTML = '';
@@ -137,12 +138,12 @@
                 optionsContainer.appendChild(btn);
             });
 
-            totalDisplay.textContent = currentQuestion + 1;
             setTimeout(() => playAudio(), 300);
         }
 
         function playAudio() {
-            const audio = new Audio(`alphabets/${correctAnswer}.wav`);
+            const audioPath = quizMode === 'number' ? `numbers/${correctAnswer}.wav` : `alphabets/${correctAnswer}.wav`;
+            const audio = new Audio(audioPath);
             audio.play().catch(error => {
                 console.error('Error playing audio:', error);
             });
@@ -162,7 +163,6 @@
 
             if (selected === correctAnswer) {
                 score++;
-                scoreDisplay.textContent = score;
                 feedback.textContent = '✓ Correct!';
                 feedback.className = 'mt-6 text-center text-xl font-bold text-emerald-600';
             } else {
@@ -187,11 +187,25 @@
         function startQuiz() {
             currentQuestion = 0;
             score = 0;
-            scoreDisplay.textContent = 0;
-            shuffledAlphabets = shuffleArray(alphabets).slice(0, totalQuestions);
+            shuffledItems = shuffleArray(quizMode === 'number' ? numbers : alphabets).slice(0, totalQuestions);
             quizContainer.classList.remove('hidden');
             resultsContainer.classList.add('hidden');
             loadQuestion();
+        }
+
+        function selectMode(mode) {
+            quizMode = mode;
+            quizContainer.classList.remove('hidden');
+            resultsContainer.classList.add('hidden');
+            startQuiz();
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const initialMode = params.get('mode');
+        if (initialMode === 'number') {
+            selectMode('number');
+        } else {
+            selectMode('alphabet');
         }
 
         playAudioBtn.addEventListener('click', playAudio);
@@ -199,9 +213,7 @@
             currentQuestion++;
             loadQuestion();
         });
-        restartBtn.addEventListener('click', startQuiz);
-
-        startQuiz();
+        restartBtn.addEventListener('click', () => selectMode(quizMode));
     </script>
 </body>
 </html>
