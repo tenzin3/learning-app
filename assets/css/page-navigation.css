@@ -1,0 +1,15 @@
+/* Shared navigation for the original quiz and recording pages. */
+.page-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 16px 24px;
+  background: white;
+  color: #5145b5;
+  font-family: system-ui;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e5ee;
+}
+.storage-status {
+  text-align: center;
+}

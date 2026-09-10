@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Learn the Tibetan alphabet with original pronunciation recordings and playful practice."
+    />
+    <title>Games · Tibetan Learning</title>
+    <link rel="stylesheet" href="assets/css/site.css" />
+    <script defer src="assets/js/data/alphabet.js"></script>
+    <script defer src="assets/js/shared/saved-progress.js"></script>
+    <script defer src="assets/js/data/game-catalog.js"></script>
+    <script defer src="assets/js/shared/navigation.js"></script>
+    <script defer src="assets/js/pages/games.js"></script>
+  </head>
+  <body data-section="games">
+    <main id="main">
+      <div class="page-heading">
+        <span class="eyebrow">A little practice, every day</span>
+        <h1>Find your next adventure.</h1>
+        <p class="subtitle">
+          Listen, explore, and get to know the Tibetan alphabet. Choose an
+          activity to begin.
+        </p>
+      </div>
+      <section id="games">
+        <div class="section-label">
+          <h2>Alphabet games</h2>
+          <span class="muted">Choose your way to learn</span>
+        </div>
+        <div id="games-grid" class="card-grid"></div>
+      </section>
+      <section id="number-games">
+        <div class="section-label"><h2>Number</h2></div>
+        <div id="number-games-grid" class="card-grid"></div>
+      </section>
+      <p class="note">
+        Start with the first 8 letters and explore more when you feel ready.
+        <a href="learn.html">Listen to the alphabet →</a>
+      </p>
+      <p class="note">
+        <a href="learn.html">Alphabet & number flashcards</a> ·
+        <a href="practice.html">Record your pronunciation</a>
+      </p>
+      <p id="audio-status" role="status"></p>
+      <p id="storage-status" role="status"></p>
+      <noscript>Please enable JavaScript to load the activities.</noscript>
+    </main>
+  </body>
+</html>

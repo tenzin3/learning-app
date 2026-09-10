@@ -1,0 +1,73 @@
+/* Original number flashcards and recording filenames, shared with Learn. */
+Tibetan.numbers = [
+  { numeral: "༡", word: "གཅིག་", phonetic: "one", audio: "༡-གཅིག-1.wav" },
+  { numeral: "༢", word: "གཉིས།", phonetic: "two", audio: "༢-གཉིས།-2.wav" },
+  { numeral: "༣", word: "གསུམ།", phonetic: "three", audio: "༣-གསུམ།-3.wav" },
+  { numeral: "༤", word: "བཞི།", phonetic: "four", audio: "༤-བཞི།-4.wav" },
+  { numeral: "༥", word: "ལྔ་།", phonetic: "five", audio: "༥-ལྔ་།-5.wav" },
+  { numeral: "༦", word: "དྲུག", phonetic: "six", audio: "༦-དྲུག-6.wav" },
+  { numeral: "༧", word: "བདུན།", phonetic: "seven", audio: "༧-བདུན།-7.wav" },
+  { numeral: "༨", word: "བརྒྱད།", phonetic: "eight", audio: "༨-བརྒྱད།-8.wav" },
+  { numeral: "༩", word: "དགུ་", phonetic: "nine", audio: "༩-དགུ་-9.wav" },
+  { numeral: "༡༠", word: "བཅུ།", phonetic: "ten", audio: "༡༠-བཅུ།-10.wav" },
+  {
+    numeral: "༡༡",
+    word: "བཅུ་གཅིག་",
+    phonetic: "eleven",
+    audio: "༡༡-བཅུ་གཅིག་-11.wav",
+  },
+  {
+    numeral: "༡༢",
+    word: "བཅུ་གཉིས།",
+    phonetic: "twelve",
+    audio: "༡༢-བཅུ་གཉིས།-12.wav",
+  },
+  {
+    numeral: "༡༣",
+    word: "བཅུ་གསུམ།",
+    phonetic: "thirteen",
+    audio: "༡༣-བཅུ་གསུམ།-13.wav",
+  },
+  {
+    numeral: "༡༤",
+    word: "བཅུ་བཞི།",
+    phonetic: "fourteen",
+    audio: "༡༤-བཅུ་བཞི།-14.wav",
+  },
+  {
+    numeral: "༡༥",
+    word: "བཅོ་ལྔ་།",
+    phonetic: "fifteen",
+    audio: "༡༥-བཅོ་ལྔ་།-15.wav",
+  },
+  {
+    numeral: "༡༦",
+    word: "བཅུ་དྲུག",
+    phonetic: "sixteen",
+    audio: "༡༦-བཅུ་དྲུག-16.wav",
+  },
+  {
+    numeral: "༡༧",
+    word: "བཅུ་བདུན།",
+    phonetic: "seventeen",
+    audio: "༡༧-བཅུ་བདུན།-17.wav",
+  },
+  {
+    numeral: "༡༨",
+    word: "བཅོ་བརྒྱད།",
+    phonetic: "eighteen",
+    audio: "༡༨-བཅོ་བརྒྱད།-18.wav",
+  },
+  {
+    numeral: "༡༩",
+    word: "བཅུ་དགུ་",
+    phonetic: "nineteen",
+    audio: "༡༩-བཅུ་དགུ་-19.wav",
+  },
+  {
+    numeral: "༢༠",
+    word: "ཉི་ཤུ།",
+    phonetic: "twenty",
+    audio: "༢༠-ཉི་ཤུ།-20.wav",
+  },
+].map((item) => ({ ...item, audio: `numbers/${item.audio}` }));

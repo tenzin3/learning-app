@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Learn the Tibetan alphabet with original pronunciation recordings and playful practice."
+    />
+    <title>Alphabet Ordering · Tibetan Learning</title>
+    <link rel="stylesheet" href="../assets/css/site.css" />
+    <script defer src="../assets/js/data/alphabet.js"></script>
+    <script defer src="../assets/js/shared/audio-player.js"></script>
+    <script defer src="../assets/js/shared/saved-progress.js"></script>
+    <script defer src="../assets/js/data/game-catalog.js"></script>
+    <script defer src="../assets/js/shared/navigation.js"></script>
+    <script defer src="../assets/js/shared/random.js"></script>
+    <script defer src="../assets/js/shared/game-session.js"></script>
+    <script defer src="../assets/js/games/ordering.js"></script>
+  </head>
+  <body data-section="games">
+    <main id="main" class="game-main">
+      <a class="back" href="../activities.html#games">← All activities</a>
+      <div class="game-header">
+        <div>
+          <span class="eyebrow">Play & learn</span>
+          <h1 id="game-title">Alphabet Ordering</h1>
+        </div>
+        <span class="pill">Original recordings</span>
+      </div>
+      <p id="game-description" class="subtitle"></p>
+      <div class="settings">
+        <label for="difficulty">Letter set</label
+        ><select id="difficulty">
+          <option value="0">Beginner · First 8</option>
+          <option value="1">Intermediate · First 16</option>
+          <option value="2">Challenge · All 30</option></select
+        ><button id="pause" class="button" hidden>Pause</button
+        ><button id="restart" class="button" hidden>Restart</button>
+      </div>
+      <div class="panel">
+        <div id="stats" class="stats" aria-label="Game statistics"></div>
+        <div id="pause-banner" class="pause-banner" hidden>
+          Game paused. Select Resume when you are ready. Replay the sound if
+          needed.
+        </div>
+        <div id="stage" class="stage"></div>
+        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+        <p id="audio-status" role="status"></p>
+        <p id="storage-status" role="status"></p>
+      </div>
+      <noscript>Please enable JavaScript to play this activity.</noscript>
+    </main>
+  </body>
+</html>
