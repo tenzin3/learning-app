@@ -213,25 +213,6 @@ test("speed stops at 60 active seconds, excludes paused time, and reports misses
   }
 });
 
-test("boss advances through 100/120/150 HP and completes only after 37 hits", () => {
-  const app = setupGame("boss");
-  try {
-    for (let i = 0; i < 37; i++) {
-      assert.equal(app.session.ended, false);
-      app.answer();
-      app.advance(1150);
-    }
-    assert.equal(app.session.ended, true);
-    assert.equal(app.session.score, 370);
-    assert.match(
-      app.w.document.querySelector(".result h2").textContent,
-      /champion/,
-    );
-  } finally {
-    app.close();
-  }
-});
-
 test("restart cancels old timers and difficulty changes return to a fresh start", () => {
   const app = setupGame("speed");
   try {

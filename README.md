@@ -26,7 +26,6 @@ The new navigation links from the original pages to Learn and Games. The origina
 | Falling Letters | `games/falling.html` | `assets/js/games/falling.js` |
 | Letter Targets (shooting) | `games/shooting.html` | `assets/js/games/shooting.js` |
 | Speed Challenge | `games/speed.html` | `assets/js/games/speed.js` |
-| Boss Battle | `games/boss.html` | `assets/js/games/boss.js` |
 
 ## Shared files
 
@@ -51,7 +50,6 @@ Scripts use a shared `Tibetan` namespace and deferred script tags rather than Ja
 - **Falling:** 3 hearts, 20 correct catches to win, +10 per catch. A wrong catch or missed target costs a heart and 5 points, with a score floor of zero. Each wave includes the target and three distractors. Speed increases with catches.
 - **Targets:** 3 hearts and 20 correct hits to win. The third consecutive hit earns 20 points; the fifth and later hits earn 30 points. Wrong hits cost a heart and reset the combo. Targets occupy randomized positions.
 - **Speed:** 60 seconds of active play, +10 per correct answer, immediate next question after brief feedback. Results show score, accuracy, correct/incorrect counts, best streak, and missed letters with replay.
-- **Boss:** 5 hearts, three enemies with 100, 120, and 150 HP. Every correct answer does 10 damage. A wrong answer costs a heart. Defeating an enemy restores one heart, capped at five.
 
 All new games have manual pause/resume. Switching tabs pauses them automatically; returning requires Resume. Audio stops while paused. The original quiz retains its existing behavior.
 
@@ -92,4 +90,4 @@ npm install --no-save --package-lock=false jsdom@29.1.1
 node --test tests/games.test.cjs
 ```
 
-Tests cover original audio references, unique choices, retries, completed rounds, memory pairs, tap ordering and sequential audio, falling misses, combos, boss progression, 60-second timing, pause, restart, and saved progress.
+Tests cover original audio references, unique choices, retries, completed rounds, memory pairs, tap ordering and sequential audio, falling misses, combos, 60-second timing, pause, restart, and saved progress.

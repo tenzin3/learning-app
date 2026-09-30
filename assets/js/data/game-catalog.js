@@ -63,11 +63,4 @@ Tibetan.catalog = [
     description: "How many sounds can you recognize in 60 seconds?",
     tag: "60 seconds",
   },
-  {
-    id: "boss",
-    title: "Boss Battle",
-    icon: "⚔",
-    description: "Use your alphabet skills to defeat three friendly monsters.",
-    tag: "3 stages",
-  },
 ];
