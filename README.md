@@ -6,9 +6,9 @@ The existing public site is https://tenzin3.github.io/learning-app/. Local edits
 
 ## Open the app
 
-Open `activities.html` for the games hub, or `learn.html` for alphabet and number flashcards. All new pages also work directly from disk. For consistent browser storage and a local preview, run `python3 -m http.server 8765` and visit http://localhost:8765/activities.html.
+Open `index.html` (or `learn.html`) for alphabet and number flashcards, or `activities.html` for the games hub. All new pages also work directly from disk. For consistent browser storage and a local preview, run `python3 -m http.server 8765` and visit http://localhost:8765/.
 
-The duplicate `index.html` page has been removed. Use `/learn.html` or `/activities.html` as the entry URL; the site no longer has a default root index page.
+The root URL opens the Learn page. Use `/activities.html` to open the games hub.
 
 The new navigation links from the original pages to Learn and Games. The original alphabet/number quiz and pronunciation recorder remain available.
 

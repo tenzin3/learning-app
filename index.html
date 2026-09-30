@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Learn the Tibetan alphabet with original pronunciation recordings and playful practice."
+    />
+    <title>Learn letters & numbers · Tibetan Learning</title>
+    <link rel="stylesheet" href="assets/css/site.css" />
+    <script defer src="assets/js/data/alphabet.js"></script>
+    <script defer src="assets/js/data/numbers.js"></script>
+    <script defer src="assets/js/shared/audio-player.js"></script>
+    <script defer src="assets/js/shared/navigation.js"></script>
+    <script defer src="assets/js/pages/learn.js"></script>
+  </head>
+  <body data-section="learn">
+    <main id="main">
+      <div class="page-heading">
+        <span class="eyebrow">Learn · 30 letters</span>
+        <h1>One letter. One sound.</h1>
+        <p class="subtitle">
+          Tap a letter to hear its original recording. Tap again whenever you
+          want to listen.
+        </p>
+      </div>
+      <p id="audio-status" role="status"></p>
+      <p id="storage-status" role="status"></p>
+      <div id="learn-grid" class="learn-grid"></div>
+      <section id="numbers">
+        <div class="section-label"><h2>Number flashcards</h2></div>
+        <p class="muted">Tap a number to hear its pronunciation.</p>
+        <div id="number-grid" class="learn-grid"></div>
+      </section>
+      <noscript
+        >Please enable JavaScript to hear the alphabet recordings.</noscript
+      >
+    </main>
+  </body>
+</html>
