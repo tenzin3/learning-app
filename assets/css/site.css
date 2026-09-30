@@ -453,7 +453,7 @@ select {
 .memory-card .tibetan {
   font-size: 2.7rem;
 }
-/* Falling Letters and Letter Targets */
+/* Letter Targets */
 .arena {
   position: relative;
   overflow: hidden;
@@ -462,9 +462,6 @@ select {
   border-radius: 16px;
   background: linear-gradient(#f2f1ff, #fafaff);
   margin: 20px 0;
-}
-.arena.falling {
-  border-bottom: 5px solid #aaa3de;
 }
 .target {
   position: absolute;
@@ -480,11 +477,6 @@ select {
 .target:hover {
   background: var(--light);
   border-color: var(--accent);
-}
-.falling .target {
-  width: 22%;
-  max-width: 100px;
-  border-radius: 14px;
 }
 .arena-label {
   position: absolute;

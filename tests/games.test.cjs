@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, "..");
 const { setupGame } = require("./helpers/game-harness.cjs");
 
 test("all alphabet entries point to original, nonempty WAV files", () => {
-  const app = setupGame("speed");
+  const app = setupGame("shooting");
   try {
     assert.equal(app.w.Tibetan.letters.length, 30);
     for (const item of app.w.Tibetan.letters)
@@ -135,34 +135,6 @@ test("ordering supports tap placement, mistakes, checking and sequential origina
   }
 });
 
-test("falling misses cost hearts, pause freezes motion, 20 catches win", () => {
-  const app = setupGame("falling");
-  try {
-    Object.defineProperty(
-      app.w.document.querySelector(".arena"),
-      "clientHeight",
-      { value: 410 },
-    );
-    app.clickText("Pause");
-    app.advance(30000);
-    assert.equal(app.session.elapsed, 0);
-    assert.equal(app.session.incorrect, 0);
-    app.clickText("Resume");
-    app.advance(12000);
-    assert.equal(app.session.incorrect, 1);
-    app.advance(1000);
-    for (let i = 0; i < 20; i++) {
-      app.answer();
-      app.advance(500);
-    }
-    assert.equal(app.session.ended, true);
-    assert.equal(app.session.correct, 20);
-    assert.equal(app.session.score, 200);
-  } finally {
-    app.close();
-  }
-});
-
 test("shooting applies exact combo thresholds, resets streak, and ends at zero hearts", () => {
   const app = setupGame("shooting");
   try {
@@ -185,36 +157,8 @@ test("shooting applies exact combo thresholds, resets streak, and ends at zero h
   }
 });
 
-test("speed stops at 60 active seconds, excludes paused time, and reports misses", () => {
-  const app = setupGame("speed");
-  try {
-    app.answer();
-    app.advance(300);
-    app.answer(false);
-    app.advance(300);
-    app.clickText("Pause");
-    app.advance(60000);
-    assert.equal(app.session.ended, false);
-    app.clickText("Resume");
-    app.advance(59400);
-    assert.equal(app.session.ended, true);
-    assert.equal(app.session.correct, 1);
-    assert.equal(app.session.incorrect, 1);
-    assert.match(app.w.document.getElementById("stats").textContent, /50%/);
-    assert.equal(
-      app.w.document.querySelectorAll(".review-letters button").length,
-      1,
-    );
-    const xp = app.w.Tibetan.progress.summary().xp;
-    app.advance(10000);
-    assert.equal(app.w.Tibetan.progress.summary().xp, xp);
-  } finally {
-    app.close();
-  }
-});
-
 test("restart cancels old timers and difficulty changes return to a fresh start", () => {
-  const app = setupGame("speed");
+  const app = setupGame("shooting");
   try {
     const previous = app.session;
     app.advance(1000);
@@ -235,7 +179,7 @@ test("restart cancels old timers and difficulty changes return to a fresh start"
 });
 
 test("progress survives reload, counts local days once, and tolerates unavailable storage", () => {
-  const app = setupGame("speed");
+  const app = setupGame("shooting");
   try {
     app.answer();
     const first = app.w.Tibetan.progress.summary();
@@ -271,7 +215,7 @@ test("progress survives reload, counts local days once, and tolerates unavailabl
 });
 
 test("playback failures are visible, replay recovers, and changing tabs pauses", async () => {
-  const app = setupGame("speed");
+  const app = setupGame("shooting");
   try {
     app.player.play = () =>
       Promise.reject(

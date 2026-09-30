@@ -43,24 +43,10 @@ Tibetan.catalog = [
     tag: "Take your time",
   },
   {
-    id: "falling",
-    title: "Falling Letters",
-    icon: "↓",
-    description: "Catch the sound before its letter reaches the bottom.",
-    tag: "3 hearts",
-  },
-  {
     id: "shooting",
     title: "Letter Targets",
     icon: "◎",
     description: "Listen, aim, and tap. Build a combo for extra points.",
     tag: "Combo challenge",
-  },
-  {
-    id: "speed",
-    title: "Speed Challenge",
-    icon: "◷",
-    description: "How many sounds can you recognize in 60 seconds?",
-    tag: "60 seconds",
   },
 ];

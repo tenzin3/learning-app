@@ -23,9 +23,7 @@ The new navigation links from the original pages to Learn and Games. The origina
 | Letter → Pick the Sound | `games/sound.html` | `assets/js/games/sound.js` |
 | Alphabet Ordering | `games/ordering.html` | `assets/js/games/ordering.js` |
 | Memory Match | `games/memory.html` | `assets/js/games/memory.js` |
-| Falling Letters | `games/falling.html` | `assets/js/games/falling.js` |
 | Letter Targets (shooting) | `games/shooting.html` | `assets/js/games/shooting.js` |
-| Speed Challenge | `games/speed.html` | `assets/js/games/speed.js` |
 
 ## Shared files
 
@@ -47,9 +45,7 @@ Scripts use a shared `Tibetan` namespace and deferred script tags rather than Ja
 - **Pick the Sound:** 10 letters per round. Replay and select are separate controls. Wrong answers allow retries; previously rejected choices cannot be submitted again for that question.
 - **Ordering:** arrange a random consecutive group of 4, 8, or 12 letters. Drag and drop, or tap a letter and then an empty position. Tap a filled position to return its letter to the bank. Every misplaced letter counts as an incorrect answer on a check. Solving awards each letter once and plays its recording in order. Replay the sequence after pausing if needed.
 - **Memory:** 4, 6, or 8 letter–sound pairs. Each pair of flips is one move; only letter–sound mismatches count as incorrect answers. Same-type flips still count as moves. Matched sound cards remain replayable. Completion time excludes pauses.
-- **Falling:** 3 hearts, 20 correct catches to win, +10 per catch. A wrong catch or missed target costs a heart and 5 points, with a score floor of zero. Each wave includes the target and three distractors. Speed increases with catches.
 - **Targets:** 3 hearts and 20 correct hits to win. The third consecutive hit earns 20 points; the fifth and later hits earn 30 points. Wrong hits cost a heart and reset the combo. Targets occupy randomized positions.
-- **Speed:** 60 seconds of active play, +10 per correct answer, immediate next question after brief feedback. Results show score, accuracy, correct/incorrect counts, best streak, and missed letters with replay.
 
 All new games have manual pause/resume. Switching tabs pauses them automatically; returning requires Resume. Audio stops while paused. The original quiz retains its existing behavior.
 
@@ -90,4 +86,4 @@ npm install --no-save --package-lock=false jsdom@29.1.1
 node --test tests/games.test.cjs
 ```
 
-Tests cover original audio references, unique choices, retries, completed rounds, memory pairs, tap ordering and sequential audio, falling misses, combos, 60-second timing, pause, restart, and saved progress.
+Tests cover original audio references, unique choices, retries, completed rounds, memory pairs, tap ordering and sequential audio, combos, pause, restart, and saved progress.
