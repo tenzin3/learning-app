@@ -111,7 +111,6 @@ function setupGame(id) {
       dom.window.close();
     },
   };
-  clickText("Start activity");
   return api;
 }
 

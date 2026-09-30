@@ -43,11 +43,11 @@ Scripts use a shared `Tibetan` namespace and deferred script tags rather than Ja
 
 - **Letter sets:** beginner uses the first 8 letters, intermediate the first 16, and challenge all 30. Changing the set starts a fresh activity. Restart discards the unfinished round; XP already earned remains.
 - **Pick the Sound:** 10 letters per round. Replay and select are separate controls. Wrong answers allow retries; previously rejected choices cannot be submitted again for that question.
-- **Ordering:** arrange a random consecutive group of 4, 8, or 12 letters. Drag and drop, or tap a letter and then an empty position. Tap a filled position to return its letter to the bank. Every misplaced letter counts as an incorrect answer on a check. Solving awards each letter once and plays its recording in order. Replay the sequence after pausing if needed.
-- **Memory:** 4, 6, or 8 letter–sound pairs. Each pair of flips is one move; only letter–sound mismatches count as incorrect answers. Same-type flips still count as moves. Matched sound cards remain replayable. Completion time excludes pauses.
-- **Targets:** 3 hearts and 20 correct hits to win. The third consecutive hit earns 20 points; the fifth and later hits earn 30 points. Wrong hits cost a heart and reset the combo. Targets occupy randomized positions.
+- **Ordering:** solve 10 sequences of 4, 8, or 12 consecutive letters. Drag and drop, or tap a letter, then its destination. Each misplaced letter counts as an incorrect answer. Correct sequences play in order before the next round.
+- **Memory:** match 10 letter–sound pairs. Beginner uses its 8 letters plus 2 repeated pairs. Each pair of flips is one move; only letter–sound mismatches count as incorrect answers. Matched sound cards remain replayable.
+- **Targets:** answer 10 questions, with 3 hearts. The third consecutive hit earns 20 points; the fifth and later hits earn 30 points. Wrong hits cost a heart and reset the combo. Targets occupy randomized positions.
 
-All new games have manual pause/resume. Switching tabs pauses them automatically; returning requires Resume. Audio stops while paused. The original quiz retains its existing behavior.
+New games start as soon as their page opens. They have manual pause/resume; switching tabs pauses them automatically, and returning requires Resume. Audio stops while paused. The original quiz retains its existing behavior.
 
 ## Saved game data
 

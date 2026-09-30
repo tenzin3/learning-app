@@ -4,20 +4,23 @@ Tibetan.mountGame(
   "Drag letters into alphabet order. Or tap a letter, then tap its destination. Tap a filled position to return its letter. Check your order when you are ready.",
   (session) => {
     const count = [4, 8, 12][session.difficulty];
-    const start = Math.floor(Math.random() * (session.pool.length - count + 1));
-    const expected = session.pool.slice(start, start + count);
-    const shuffled = Tibetan.shuffle(expected),
-      slots = Array(count).fill(null);
-    let selected = null,
+    const rounds = 10;
+    let round = 0,
+      expected = [],
+      shuffled = [],
+      slots = [],
       checks = 0,
       solved = false,
       sequence = 0;
+    let selected = null;
     const bank = document.createElement("div");
     bank.className = "order-bank";
     bank.setAttribute("aria-label", "Letters to arrange");
     const destinations = document.createElement("div");
     destinations.className = "order-slots";
     destinations.setAttribute("aria-label", "Alphabet order");
+    const actions = document.createElement("div");
+    actions.className = "actions";
     const place = (id, index) => {
       if (solved || session.paused || session.ended) return;
       const item = expected.find((item) => item.id === id);
@@ -84,6 +87,7 @@ Tibetan.mountGame(
       });
       check.disabled = solved || slots.some((item) => !item);
       session.metrics({
+        Round: `${round} / ${rounds}`,
         Letters: count,
         "Order checks": checks,
         Score: session.score,
@@ -98,6 +102,23 @@ Tibetan.mountGame(
         if (!ok || session.ended || session.paused || token !== sequence) break;
       }
     };
+    const nextRound = () => {
+      Tibetan.audio.stop();
+      sequence++;
+      round++;
+      const start = Math.floor(
+        Math.random() * (session.pool.length - count + 1),
+      );
+      expected = session.pool.slice(start, start + count);
+      shuffled = Tibetan.shuffle(expected);
+      slots = Array(count).fill(null);
+      selected = null;
+      checks = 0;
+      solved = false;
+      actions.innerHTML = "";
+      session.feedback("");
+      render();
+    };
     const check = Tibetan.button(
       "Check order",
       () => {
@@ -111,22 +132,21 @@ Tibetan.mountGame(
             "good",
           );
           render();
-          const actions = document.createElement("div");
-          actions.className = "actions";
           actions.append(
             Tibetan.button("♫ Replay in order", playSequence, "button sound"),
           );
           actions.append(
             Tibetan.button(
-              "See results",
-              () =>
-                session.finish("Alphabet in order!", true, {
-                  "Order checks": checks,
-                }),
+              round === rounds ? "See results" : "Next sequence →",
+              round === rounds
+                ? () =>
+                    session.finish("Alphabet in order!", true, {
+                      Rounds: rounds,
+                    })
+                : nextRound,
               "button primary",
             ),
           );
-          session.stage.append(actions);
           playSequence();
         } else {
           slots.forEach((item, index) => {
@@ -148,7 +168,7 @@ Tibetan.mountGame(
     const label = document.createElement("p");
     label.textContent = "Alphabet order →";
     label.className = "muted";
-    session.stage.append(bank, label, destinations, check);
-    render();
+    session.stage.append(bank, label, destinations, check, actions);
+    nextRound();
   },
 );

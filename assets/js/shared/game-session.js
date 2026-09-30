@@ -1,5 +1,5 @@
-/* Shared runtime for the seven games in assets/js/games/.
- * mountGame creates the start screen and owns restart/difficulty changes.
+/* Shared runtime for the four games in assets/js/games/.
+ * mountGame starts the selected game and owns restart/difficulty changes.
  * GameSession owns one round: timers, answers, feedback, pause, and results.
  * Each game supplies its rules through mountGame(id, instructions, startRound).
  */
@@ -243,31 +243,9 @@
       document.getElementById("restart").hidden = false;
       start(session);
     };
-    const intro = () => {
-      session?.dispose();
-      session = null;
-      stage.innerHTML = "";
-      document.getElementById("stats").innerHTML = "";
-      document.getElementById("feedback").textContent = "";
-      document.getElementById("pause").hidden = true;
-      document.getElementById("restart").hidden = true;
-      const icon = document.createElement("div");
-      icon.className = "activity-icon";
-      icon.style.margin = "10px auto 22px";
-      icon.textContent = config.icon;
-      const text = document.createElement("p");
-      text.className = "instruction";
-      text.textContent =
-        "Take a moment to turn up your sound. You can replay every recording.";
-      stage.append(
-        icon,
-        text,
-        Tibetan.button("Start activity", begin, "button primary"),
-      );
-    };
-    difficulty.addEventListener("change", intro);
+    difficulty.addEventListener("change", begin);
     document.getElementById("restart").onclick = begin;
     window.addEventListener("pagehide", () => session?.dispose());
-    intro();
+    begin();
   };
 })();

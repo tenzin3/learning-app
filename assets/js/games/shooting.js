@@ -1,7 +1,7 @@
 /* shooting: game rules only. Shared controls and results are in shared/game-session.js. */
 Tibetan.mountGame(
   "shooting",
-  "Listen and tap the matching target. Correct hits earn 10 points. A streak of 3 earns ×2; a streak of 5 earns ×3. Wrong hits cost a heart. Make 20 correct hits to win.",
+  "Listen and tap the matching target. Correct hits earn 10 points. A streak of 3 earns ×2; a streak of 5 earns ×3. Wrong hits cost a heart. Answer 10 questions to win.",
   (session) => {
     let hearts = 3,
       hits = 0,
@@ -14,7 +14,7 @@ Tibetan.mountGame(
         Hearts: "♥".repeat(hearts) || "0",
         Streak: session.streak,
         Combo: `×${multiplier(session.streak)}`,
-        Hits: `${hits} / 20`,
+        Questions: `${hits} / 10`,
       });
     const replay = Tibetan.button(
       "♫ Replay pronunciation",
@@ -26,7 +26,7 @@ Tibetan.mountGame(
     arena.setAttribute("aria-label", "Letter targets");
     session.stage.append(replay, arena);
     const next = () => {
-      if (hits >= 20) return session.finish("Sharp listening!");
+      if (hits >= 10) return session.finish("Sharp listening!");
       locked = false;
       target = Tibetan.pick(session.pool);
       arena.innerHTML = "";

@@ -8,6 +8,21 @@ const root = path.resolve(__dirname, "..");
 
 const { setupGame } = require("./helpers/game-harness.cjs");
 
+test("games start immediately when selected", () => {
+  const app = setupGame("shooting");
+  try {
+    assert.ok(app.w.document.querySelector(".target"));
+    assert.equal(
+      [...app.w.document.querySelectorAll("button")].some(
+        (button) => button.textContent === "Start activity",
+      ),
+      false,
+    );
+  } finally {
+    app.close();
+  }
+});
+
 test("all alphabet entries point to original, nonempty WAV files", () => {
   const app = setupGame("shooting");
   try {
@@ -58,7 +73,7 @@ test("sound practice retries wrong answers, finishes 10 questions and persists o
   }
 });
 
-test("memory handles same-type flips and mismatches, then retains matches and finishes", () => {
+test("memory plays ten pairs, handles mismatches, and retains matches", () => {
   const app = setupGame("memory");
   try {
     const cards = [...app.w.document.querySelectorAll(".memory-card")];
@@ -79,6 +94,7 @@ test("memory handles same-type flips and mismatches, then retains matches and fi
       const partner = [...known].find(
         ([other, value]) =>
           other !== button &&
+          !other.classList.contains("matched") &&
           value.letter === item.letter &&
           value.type !== item.type,
       )[0];
@@ -88,9 +104,9 @@ test("memory handles same-type flips and mismatches, then retains matches and fi
       assert.ok(partner.classList.contains("matched"));
     }
     app.advance(850);
-    assert.equal(app.session.correct, 4);
+    assert.equal(app.session.correct, 10);
     assert.equal(app.session.ended, true);
-    assert.equal(app.w.Tibetan.progress.read().games.memory.best, 80);
+    assert.equal(app.w.Tibetan.progress.read().games.memory.best, 200);
   } finally {
     app.close();
   }
@@ -99,37 +115,58 @@ test("memory handles same-type flips and mismatches, then retains matches and fi
 test("ordering supports tap placement, mistakes, checking and sequential original audio", async () => {
   const app = setupGame("ordering");
   try {
-    const items = [...app.w.document.querySelectorAll(".order-tile")]
-      .map((button) =>
-        app.w.Tibetan.letters.find(
-          (item) => item.letter === button.textContent,
-        ),
-      )
-      .sort((a, b) => a.order - b.order);
-    const arrange = (ordered) =>
-      ordered.forEach((item, index) => {
+    const itemsForRound = () =>
+      [...app.w.document.querySelectorAll(".order-tile")]
+        .map((button) =>
+          app.w.Tibetan.letters.find(
+            (item) => item.letter === button.textContent,
+          ),
+        )
+        .sort((a, b) => a.order - b.order);
+    const arrange = (items) =>
+      items.forEach((item, index) => {
         [...app.w.document.querySelectorAll(".order-tile")]
           .find((button) => button.textContent === item.letter)
           .click();
         app.w.document.querySelectorAll(".order-slot")[index].click();
       });
-    arrange([...items].reverse());
+    const initialItems = itemsForRound();
+    arrange([...initialItems].reverse());
     app.clickText("Check order");
     assert.ok(app.session.incorrect > 0);
     assert.equal(app.session.correct, 0);
-    for (let i = 0; i < items.length; i++)
-      app.w.document.querySelectorAll(".order-slot")[i].click();
-    arrange(items);
-    app.clickText("Check order");
-    for (const item of items) {
-      assert.equal(app.target().id, item.id);
-      app.player.onended();
-      await Promise.resolve();
-      await Promise.resolve();
+    for (const slot of app.w.document.querySelectorAll(".order-slot"))
+      slot.click();
+    for (let round = 0; round < 10; round++) {
+      const items = itemsForRound();
+      arrange(items);
+      app.clickText("Check order");
+      assert.equal(app.session.correct, (round + 1) * items.length);
+      for (const item of items) {
+        assert.equal(app.target().id, item.id);
+        app.player.onended();
+        await Promise.resolve();
+        await Promise.resolve();
+      }
+      app.clickText(round === 9 ? "See results" : "Next sequence →");
     }
-    app.clickText("See results");
     assert.equal(app.session.ended, true);
-    assert.equal(app.session.correct, 4);
+    assert.equal(app.session.correct, 40);
+  } finally {
+    app.close();
+  }
+});
+
+test("letter targets finish after ten correct questions", () => {
+  const app = setupGame("shooting");
+  try {
+    for (let question = 0; question < 10; question++) {
+      app.answer();
+      app.advance(550);
+    }
+    assert.equal(app.session.correct, 10);
+    assert.equal(app.session.ended, true);
+    assert.match(app.w.document.getElementById("stats").textContent, /10Correct/);
   } finally {
     app.close();
   }
@@ -170,7 +207,6 @@ test("restart cancels old timers and difficulty changes return to a fresh start"
     select.value = "2";
     select.dispatchEvent(new app.w.Event("change"));
     app.advance(100000);
-    app.clickText("Start activity");
     assert.equal(app.session.pool.length, 30);
     assert.equal(app.session.score, 0);
   } finally {

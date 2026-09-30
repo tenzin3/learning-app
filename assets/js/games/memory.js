@@ -3,8 +3,9 @@ Tibetan.mountGame(
   "memory",
   "Turn over two cards. Match a written letter with its sound. Tap a revealed sound card to replay it. Each pair of flips counts as one move.",
   (session) => {
-    const count = [4, 6, 8][session.difficulty];
+    const count = 10;
     const selected = Tibetan.shuffle(session.pool).slice(0, count);
+    while (selected.length < count) selected.push(Tibetan.pick(session.pool));
     const cards = Tibetan.shuffle(
       selected.flatMap((item) => [
         { item, type: "letter" },
