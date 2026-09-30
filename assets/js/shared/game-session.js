@@ -239,11 +239,11 @@
     let session;
     const begin = () => {
       session?.dispose();
-      session = new GameSession(id, Number(difficulty.value), begin);
+      session = new GameSession(id, difficulty ? Number(difficulty.value) : 2, begin);
       document.getElementById("restart").hidden = false;
       start(session);
     };
-    difficulty.addEventListener("change", begin);
+    difficulty?.addEventListener("change", begin);
     document.getElementById("restart").onclick = begin;
     window.addEventListener("pagehide", () => session?.dispose());
     begin();

@@ -1,7 +1,7 @@
 /* sound: game rules only. Shared controls and results are in shared/game-session.js. */
 Tibetan.mountGame(
   "sound",
-  "Look at the letter. Play each sound, then choose the matching recording. A wrong answer lets you listen and try again.",
+  "Practice all 30 letters. Look at each letter, play the choices, and choose its matching recording.",
   (session) => {
     let round = 0;
     const next = () => {

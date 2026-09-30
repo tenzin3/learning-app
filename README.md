@@ -41,8 +41,8 @@ Scripts use a shared `Tibetan` namespace and deferred script tags rather than Ja
 
 ## Game rules
 
-- **Letter sets:** beginner uses the first 8 letters, intermediate the first 16, and challenge all 30. Changing the set starts a fresh activity. Restart discards the unfinished round; XP already earned remains.
-- **Pick the Sound:** 10 letters per round. Replay and select are separate controls. Wrong answers allow retries; previously rejected choices cannot be submitted again for that question.
+- **Letter sets:** most games offer beginner (first 8), intermediate (first 16), and challenge (all 30). Pick the Sound always uses all 30 letters and has no difficulty selector. Restart discards the unfinished round; XP already earned remains.
+- **Pick the Sound:** 10 questions per round. Replay and select are separate controls. Wrong answers allow retries; previously rejected choices cannot be submitted again for that question.
 - **Ordering:** solve 10 sequences of 4, 8, or 12 consecutive letters. Drag and drop, or tap a letter, then its destination. Each misplaced letter counts as an incorrect answer. Correct sequences play in order before the next round.
 - **Memory:** match 10 letter–sound pairs. Beginner uses its 8 letters plus 2 repeated pairs. Each pair of flips is one move; only letter–sound mismatches count as incorrect answers. Matched sound cards remain replayable.
 - **Targets:** answer 10 questions with 3 hearts. Wrong answers cost a heart. Targets occupy randomized positions.

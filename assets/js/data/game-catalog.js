@@ -25,7 +25,7 @@ Tibetan.catalog = [
     id: "sound",
     title: "Letter → Pick the Sound",
     icon: "♫",
-    description: "See a letter. Listen to the choices and find its sound.",
+    description: "Match each letter to its recording across all 30 letters.",
     tag: "10 questions",
   },
   {

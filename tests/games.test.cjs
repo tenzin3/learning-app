@@ -43,6 +43,8 @@ test("all alphabet entries point to original, nonempty WAV files", () => {
 test("sound practice retries wrong answers, finishes 10 questions and persists once", () => {
   const app = setupGame("sound");
   try {
+    assert.equal(app.session.pool.length, 30);
+    assert.equal(app.w.document.getElementById("difficulty"), null);
     for (let round = 0; round < 10; round++) {
       const letter = app.w.document.querySelector(".prompt-letter").textContent;
       let matching;
