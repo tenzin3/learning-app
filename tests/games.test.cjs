@@ -160,6 +160,12 @@ test("ordering supports tap placement, mistakes, checking and sequential origina
 test("letter targets finish after ten correct questions", () => {
   const app = setupGame("shooting");
   try {
+    assert.deepEqual(
+      [...app.w.document.querySelectorAll(".metric span")].map(
+        (label) => label.textContent,
+      ),
+      ["Questions", "Hearts"],
+    );
     for (let question = 0; question < 10; question++) {
       app.answer();
       app.advance(550);

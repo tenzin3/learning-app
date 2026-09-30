@@ -45,7 +45,7 @@ Scripts use a shared `Tibetan` namespace and deferred script tags rather than Ja
 - **Pick the Sound:** 10 letters per round. Replay and select are separate controls. Wrong answers allow retries; previously rejected choices cannot be submitted again for that question.
 - **Ordering:** solve 10 sequences of 4, 8, or 12 consecutive letters. Drag and drop, or tap a letter, then its destination. Each misplaced letter counts as an incorrect answer. Correct sequences play in order before the next round.
 - **Memory:** match 10 letter–sound pairs. Beginner uses its 8 letters plus 2 repeated pairs. Each pair of flips is one move; only letter–sound mismatches count as incorrect answers. Matched sound cards remain replayable.
-- **Targets:** answer 10 questions, with 3 hearts. The third consecutive hit earns 20 points; the fifth and later hits earn 30 points. Wrong hits cost a heart and reset the combo. Targets occupy randomized positions.
+- **Targets:** answer 10 questions with 3 hearts. Wrong answers cost a heart. Targets occupy randomized positions.
 
 New games start as soon as their page opens. They have manual pause/resume; switching tabs pauses them automatically, and returning requires Resume. Audio stops while paused. The original quiz retains its existing behavior.
 

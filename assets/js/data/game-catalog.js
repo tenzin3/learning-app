@@ -46,7 +46,7 @@ Tibetan.catalog = [
     id: "shooting",
     title: "Letter Targets",
     icon: "◎",
-    description: "Listen, aim, and tap. Build a combo for extra points.",
-    tag: "Combo challenge",
+    description: "Listen and tap the matching letter. You have 10 questions.",
+    tag: "3 hearts",
   },
 ];
